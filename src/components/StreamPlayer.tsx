@@ -8,10 +8,9 @@ import {
 } from "react-icons/bs";
 import { AiOutlineLoading } from "react-icons/ai";
 import { IconContext } from "react-icons";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import ReactPlayer from "react-player/lazy";
-import { findDOMNode } from "react-dom";
-import screenfull from "screenfull";
+import { useFullscreen } from "rooks";
 
 type StreamPlayerProps = {
   src: string;
@@ -19,12 +18,15 @@ type StreamPlayerProps = {
 
 const StreamPlayer = ({ src }: StreamPlayerProps) => {
   const playerRef = useRef<ReactPlayer>(null);
-  const fullscreenRef = useRef(null);
+  const fullscreenRef = useRef<HTMLDivElement>(null);
   const [playing, setPlaying] = useState(true);
   const [muted, setMuted] = useState(true);
   const [volume, setVolume] = useState(1);
-  const [fullscreen, setFullscreen] = useState(false);
   const [buffering, setBuffering] = useState(false);
+
+  const { isFullscreenEnabled, toggleFullscreen } = useFullscreen({
+    target: fullscreenRef,
+  });
 
   const onResume = () => {
     if (playerRef.current) {
@@ -38,16 +40,6 @@ const StreamPlayer = ({ src }: StreamPlayerProps) => {
 
   const toggleMuted = () => {
     setMuted(!muted);
-  };
-
-  const toggleFullscreen = () => {
-    if (screenfull.isFullscreen) {
-      setFullscreen(false);
-      screenfull.exit();
-    } else {
-      setFullscreen(true);
-      screenfull.request(findDOMNode(fullscreenRef.current) as Element);
-    }
   };
 
   return (
@@ -88,7 +80,11 @@ const StreamPlayer = ({ src }: StreamPlayerProps) => {
               {muted ? <BsFillVolumeMuteFill /> : <BsFillVolumeUpFill />}
             </div>
             <div onClick={toggleFullscreen}>
-              {fullscreen ? <BsFullscreenExit /> : <BsArrowsFullscreen />}
+              {isFullscreenEnabled ? (
+                <BsFullscreenExit />
+              ) : (
+                <BsArrowsFullscreen />
+              )}
             </div>
           </IconContext.Provider>
         </div>

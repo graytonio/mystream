@@ -24,7 +24,7 @@ const ChatFeed = () => {
   return (
     <div className="grid grid-cols-1 divide-y">
       {messages.map((message) => (
-        <div>{message}</div>
+        <div key={Date.now() + message}>{message}</div>
       ))}
     </div>
   );

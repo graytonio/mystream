@@ -15,10 +15,16 @@ const Home: NextPage = () => {
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="mx-auto flex min-h-screen flex-col items-center justify-start">
+      <div className="hidden text-red-600 text-orange-600 text-green-500 text-teal-500 text-yellow-500 text-violet-500"></div>{" "}
+      {/* Hidden div for dynamic color generation */}
+      <main className="mx-auto grid min-h-screen grid-cols-4">
         <NoSSR>
-          <StreamPlayer src="https://suki.graytonward.com/cam/index.m3u8" />
+          <StreamPlayer
+            className="col-span-3 m-1"
+            src="https://suki.graytonward.com/cam/index.m3u8"
+          />
         </NoSSR>
+        <ChatFeed channel_name="suki" />
       </main>
     </>
   );

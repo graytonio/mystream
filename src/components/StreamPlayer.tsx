@@ -14,9 +14,10 @@ import { useFullscreen } from "rooks";
 
 type StreamPlayerProps = {
   src: string;
+  className?: string;
 };
 
-const StreamPlayer = ({ src }: StreamPlayerProps) => {
+const StreamPlayer = ({ src, className }: StreamPlayerProps) => {
   const playerRef = useRef<ReactPlayer>(null);
   const fullscreenRef = useRef<HTMLDivElement>(null);
   const [playing, setPlaying] = useState(true);
@@ -43,7 +44,7 @@ const StreamPlayer = ({ src }: StreamPlayerProps) => {
   };
 
   return (
-    <div ref={fullscreenRef} className="relative">
+    <div ref={fullscreenRef} className={`${className} relative h-fit`}>
       <ReactPlayer
         width="100%"
         height="100%"

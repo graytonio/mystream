@@ -2,6 +2,7 @@ import { ChatMessage } from "chat-types";
 import Pusher from "pusher-js";
 import { useEffect, useState, useRef, FormEvent } from "react";
 import { env } from "../env/client.mjs";
+import { getRandomColor } from "../utils/colors";
 import { trpc } from "../utils/trpc";
 
 type ChatFeedProps = {
@@ -49,13 +50,20 @@ const ChatFeed = ({ channel_name, className = "" }: ChatFeedProps) => {
 
   const sendChat = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    sendMessage.mutate({ channel: channel_name, message: newMessage });
+    if (newMessage.length === 0) {
+      return;
+    }
+    sendMessage.mutate({
+      channel: channel_name,
+      message: newMessage,
+      color: getRandomColor(),
+    });
   };
 
   return (
     <div
       ref={ref}
-      className={`${className} flex max-h-screen flex-col overflow-y-auto bg-black text-white`}
+      className={`${className} flex max-h-screen flex-col overflow-y-auto rounded-md border border-gray-300 bg-[#181818] text-white`}
     >
       <div className="flex-1" ref={ref}>
         {messages.map((message) => (
@@ -76,7 +84,7 @@ const ChatFeed = ({ channel_name, className = "" }: ChatFeedProps) => {
           type="text"
           placeholder="Chat"
         />
-        <button className="rounded-md rounded-l-none bg-purple-600 px-2 py-1 text-lg text-white">
+        <button className="rounded-md rounded-l-none bg-indigo-600 px-2 py-1 text-lg text-white">
           Send
         </button>
       </form>

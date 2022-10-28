@@ -69,6 +69,7 @@ const StreamPlayer = ({ src, className }: StreamPlayerProps) => {
       >
         <div className="absolute bottom-1/2 left-1/2 animate-spin">
           <IconContext.Provider value={{ color: "white", size: "4rem" }}>
+            {/* TODO Buffering icon should not have to be hovered */}
             {buffering ? <AiOutlineLoading /> : null}
           </IconContext.Provider>
         </div>

@@ -9,7 +9,7 @@ import {
 import { AiOutlineLoading } from "react-icons/ai";
 import { IconContext } from "react-icons";
 import { useState, useRef } from "react";
-import ReactPlayer from "react-player/lazy";
+import ReactPlayer from "react-player";
 import { useFullscreen } from "rooks";
 
 type StreamPlayerProps = {
@@ -24,6 +24,7 @@ const StreamPlayer = ({ src, className }: StreamPlayerProps) => {
   const [muted, setMuted] = useState(true);
   const [volume, setVolume] = useState(1);
   const [buffering, setBuffering] = useState(false);
+  const [offline, setOffline] = useState(false);
 
   const { isFullscreenEnabled, toggleFullscreen } = useFullscreen({
     target: fullscreenRef,
@@ -43,6 +44,22 @@ const StreamPlayer = ({ src, className }: StreamPlayerProps) => {
     setMuted(!muted);
   };
 
+  const handleError = (error: any, data?: any) => {
+    if (error === "hlsError" && data.type === "networkError") {
+      setOffline(true);
+    }
+  };
+
+  if (offline) {
+    return (
+      <div
+        className={`${className} flex aspect-video flex-col justify-center bg-zinc-800 text-center text-white`}
+      >
+        <div className="mt- text-8xl font-bold">Offline</div>
+      </div>
+    );
+  }
+
   return (
     <div ref={fullscreenRef} className={`${className} relative h-fit`}>
       <ReactPlayer
@@ -57,22 +74,22 @@ const StreamPlayer = ({ src, className }: StreamPlayerProps) => {
         onPlay={onResume}
         onBuffer={() => setBuffering(true)}
         onBufferEnd={() => setBuffering(false)}
+        onError={handleError}
         config={{
           file: {
             forceHLS: true,
           },
         }}
       />
+      <div className="absolute bottom-1/2 left-1/2 animate-spin">
+        <IconContext.Provider value={{ color: "white", size: "4rem" }}>
+          {buffering ? <AiOutlineLoading /> : null}
+        </IconContext.Provider>
+      </div>
       <div
         onClick={togglePlay}
         className="absolute top-0 left-0 z-50 h-full w-full opacity-0 hover:opacity-100"
       >
-        <div className="absolute bottom-1/2 left-1/2 animate-spin">
-          <IconContext.Provider value={{ color: "white", size: "4rem" }}>
-            {/* TODO Buffering icon should not have to be hovered */}
-            {buffering ? <AiOutlineLoading /> : null}
-          </IconContext.Provider>
-        </div>
         <div className="absolute bottom-0 left-0 flex w-full gap-4 rounded-t-md bg-zinc-700 bg-opacity-60 p-1 align-bottom">
           <IconContext.Provider value={{ color: "white", size: "1.5rem" }}>
             <div className="flex-1" onClick={togglePlay}>

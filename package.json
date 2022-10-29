@@ -10,6 +10,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@formkit/auto-animate": "^1.0.0-beta.3",
     "@headlessui/react": "^1.7.3",
     "@next-auth/prisma-adapter": "^1.0.4",
     "@prisma/client": "^4.5.0",
@@ -28,6 +29,7 @@
     "react-hls-player": "^3.0.7",
     "react-icons": "^4.6.0",
     "react-player": "^2.11.0",
+    "react-toastify": "^9.0.8",
     "rooks": "^7.4.1",
     "screenfull": "^6.0.2",
     "superjson": "1.9.1",

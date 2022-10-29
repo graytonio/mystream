@@ -4,6 +4,7 @@ import { useEffect, useState, useRef, FormEvent } from "react";
 import { env } from "../env/client.mjs";
 import { getRandomColor } from "../utils/colors";
 import { trpc } from "../utils/trpc";
+import { toast } from "react-toastify";
 
 type ChatFeedProps = {
   channel_name: string;
@@ -29,6 +30,15 @@ const ChatFeed = ({ channel_name, className = "" }: ChatFeedProps) => {
   const sendMessage = trpc.chat.sendChat.useMutation({
     onMutate: () => {
       setNewMessage("");
+    },
+    onError: (error) => {
+      switch (error.data?.code) {
+        case "UNAUTHORIZED":
+          toast("You need to be logged in to chat");
+          return;
+        default:
+          toast(error.message);
+      }
     },
   });
 
@@ -62,10 +72,9 @@ const ChatFeed = ({ channel_name, className = "" }: ChatFeedProps) => {
 
   return (
     <div
-      ref={ref}
-      className={`${className} flex max-h-screen flex-col overflow-y-auto rounded-md border border-gray-300 bg-[#181818] text-white`}
+      className={`${className} flex flex-col overflow-y-auto rounded-md border border-gray-300 bg-[#181818] text-white`}
     >
-      <div className="flex-1" ref={ref}>
+      <div className="flex-1 overflow-y-auto" ref={ref}>
         {messages.map((message) => (
           <div key={message.id} className="p-1">
             <span className={`font-bold text-${message.color}`}>

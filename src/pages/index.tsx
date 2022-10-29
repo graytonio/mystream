@@ -18,18 +18,15 @@ const Home: NextPage = () => {
       </Head>
       <div className="hidden text-red-600 text-orange-600 text-green-500 text-teal-500 text-yellow-500 text-violet-500"></div>{" "}
       {/* Hidden div for dynamic color generation */}
-      {/* <main className="mx-auto grid min-h-screen grid-cols-4">
-        
-      </main> */}
       <Layout>
-        <div className="grid flex-1 grid-cols-4 gap-1">
+        <div className="grid h-1 flex-1 grid-cols-4 gap-1">
           <NoSSR>
             <StreamPlayer
               className="col-span-3"
               src="https://suki.graytonward.com/cam/index.m3u8"
             />
           </NoSSR>
-          <ChatFeed channel_name="suki" />
+          <ChatFeed className="max-h-full" channel_name="suki" />
         </div>
       </Layout>
     </>

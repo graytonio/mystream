@@ -10,7 +10,7 @@ import { AiOutlineLoading } from "react-icons/ai";
 import { IconContext } from "react-icons";
 import { useState, useRef } from "react";
 import ReactPlayer from "react-player";
-import { useFullscreen } from "rooks";
+import { useFullscreen, useTimeoutWhen } from "rooks";
 
 type StreamPlayerProps = {
   src: string;
@@ -49,6 +49,8 @@ const StreamPlayer = ({ src, className }: StreamPlayerProps) => {
       setOffline(true);
     }
   };
+
+  useTimeoutWhen(() => setOffline(false), 10000, offline);
 
   if (offline) {
     return (

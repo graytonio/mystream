@@ -76,6 +76,7 @@ const ChatFeed = ({ channel_name, className = "" }: ChatFeedProps) => {
         ))}
       </div>
 
+      {/* TODO Popup if not signed in */}
       <form className="flex-0 m-2 flex h-10 text-black" onSubmit={sendChat}>
         <input
           className="h-full flex-1 rounded-md rounded-r-none px-4 py-2"

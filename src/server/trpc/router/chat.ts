@@ -6,9 +6,8 @@ export const chatRouter = router({
     .input(
       z.object({ message: z.string(), channel: z.string(), color: z.string() })
     )
-    .mutation(({ ctx, input }) => {
-      console.log(input.message);
-      ctx.pusher.trigger(input.channel, "chat-message", {
+    .mutation(async ({ ctx, input }) => {
+      await ctx.pusher.trigger(input.channel, "chat-message", {
         username: ctx.session.user.name,
         message: input.message,
         color: input.color,

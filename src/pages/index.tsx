@@ -26,7 +26,7 @@ const Home: NextPage = () => {
               src="https://suki.graytonward.com/cam/index.m3u8"
             />
           </NoSSR>
-          <ChatFeed className="max-h-full" channel_name="suki" />
+          <ChatFeed className="max-h-full" channel_name="graytonio" />
         </div>
       </Layout>
     </>

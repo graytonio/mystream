@@ -1,4 +1,4 @@
-import { ChatMessage } from "chat-types";
+import { ChatMessage, Emote } from "chat-types";
 import Pusher from "pusher-js";
 import { useEffect, useState, useRef, FormEvent } from "react";
 import { env } from "../env/client.mjs";
@@ -23,10 +23,33 @@ function useChatScroll<T>(
   return ref;
 }
 
+const ChatMessage = ({
+  message,
+  emotes,
+}: {
+  message: string;
+  emotes: Emote[];
+}) => {
+  const getEmoteLink = () => {
+    for (const emote of emotes) {
+      if (message === emote.code) {
+        return emote.urls[0];
+      }
+    }
+    return "";
+  };
+};
+
 const ChatFeed = ({ channel_name, className = "" }: ChatFeedProps) => {
   const [newMessage, setNewMessage] = useState("");
   const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [emotes, setEmotes] = useState<Emote[]>([]);
   const ref = useChatScroll(messages);
+
+  const channel_emotes = trpc.emotes.getEmotes.useQuery({
+    channelId: channel_name,
+  });
+
   const sendMessage = trpc.chat.sendChat.useMutation({
     onMutate: () => {
       setNewMessage("");
@@ -41,6 +64,11 @@ const ChatFeed = ({ channel_name, className = "" }: ChatFeedProps) => {
       }
     },
   });
+
+  useEffect(() => {
+    if (!channel_emotes.data) return;
+    setEmotes(channel_emotes.data);
+  }, [channel_emotes.data]);
 
   useEffect(() => {
     const pusher = new Pusher(env.NEXT_PUBLIC_PUSHER_APP_KEY, {
@@ -85,7 +113,6 @@ const ChatFeed = ({ channel_name, className = "" }: ChatFeedProps) => {
         ))}
       </div>
 
-      {/* TODO Popup if not signed in */}
       <form className="flex-0 m-2 flex h-10 text-black" onSubmit={sendChat}>
         <input
           className="h-full flex-1 rounded-md rounded-r-none px-4 py-2"

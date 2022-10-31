@@ -45,6 +45,7 @@ const StreamPlayer = ({ src, className }: StreamPlayerProps) => {
   };
 
   const handleError = (error: any, data?: any) => {
+    console.log(error, data);
     if (error === "hlsError" && data.type === "networkError") {
       setOffline(true);
     }
@@ -55,7 +56,7 @@ const StreamPlayer = ({ src, className }: StreamPlayerProps) => {
   if (offline) {
     return (
       <div
-        className={`${className} flex aspect-video flex-col justify-center bg-zinc-800 text-center text-white`}
+        className={`${className} flex aspect-video h-fit flex-col justify-center bg-zinc-800 text-center text-white`}
       >
         <div className="mt- text-8xl font-bold">Offline</div>
       </div>

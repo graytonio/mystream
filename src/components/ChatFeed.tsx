@@ -5,6 +5,7 @@ import { env } from "../env/client.mjs";
 import { getRandomColor } from "../utils/colors";
 import { trpc } from "../utils/trpc";
 import { toast } from "react-toastify";
+import Image from "next/image.js";
 
 type ChatFeedProps = {
   channel_name: string;
@@ -23,21 +24,41 @@ function useChatScroll<T>(
   return ref;
 }
 
-const ChatMessage = ({
+const ChatDisplay = ({
   message,
   emotes,
 }: {
-  message: string;
+  message: ChatMessage;
   emotes: Emote[];
 }) => {
-  const getEmoteLink = () => {
+  const GetEmoteWord = ({ word }: { word: string }) => {
     for (const emote of emotes) {
-      if (message === emote.code) {
-        return emote.urls[0];
+      if (word === emote.code) {
+        return (
+          <div className="relative h-8 w-8">
+            <Image
+              src={emote.urls[0]?.url || "#"}
+              alt={message.message}
+              layout="fill"
+              objectFit="contain"
+            />
+          </div>
+        );
       }
     }
-    return "";
+    return <span>{word}</span>;
   };
+
+  return (
+    <div className="flex items-center gap-1 p-1 align-middle">
+      <span className={`h-full font-bold text-${message.color}`}>
+        {message.username}:{" "}
+      </span>
+      {message.message.split(" ").map((word, idx) => (
+        <GetEmoteWord key={idx} word={word} />
+      ))}
+    </div>
+  );
 };
 
 const ChatFeed = ({ channel_name, className = "" }: ChatFeedProps) => {
@@ -104,12 +125,7 @@ const ChatFeed = ({ channel_name, className = "" }: ChatFeedProps) => {
     >
       <div className="flex-1 overflow-y-auto" ref={ref}>
         {messages.map((message) => (
-          <div key={message.id} className="p-1">
-            <span className={`font-bold text-${message.color}`}>
-              {message.username}
-            </span>
-            : {message.message}
-          </div>
+          <ChatDisplay key={message.id} emotes={emotes} message={message} />
         ))}
       </div>
 

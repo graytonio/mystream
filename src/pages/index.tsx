@@ -28,7 +28,7 @@ const Home: NextPage = () => {
           </NoSSR>
           <ChatFeed
             className="max-h-full flex-1 lg:flex-initial"
-            channel_name="suki"
+            channel_name="graytonio"
           />
         </div>
       </Layout>

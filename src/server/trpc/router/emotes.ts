@@ -1,4 +1,4 @@
-import { router, protectedProcedure, publicProcedure } from "../trpc";
+import { router, publicProcedure } from "../trpc";
 import fetch from "node-fetch";
 import { z } from "zod";
 import { Emote } from "chat-types";

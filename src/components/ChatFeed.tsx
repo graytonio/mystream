@@ -46,7 +46,7 @@ const ChatDisplay = ({
         );
       }
     }
-    return <span>word</span>;
+    return <span>{word}</span>;
   };
 
   return (
